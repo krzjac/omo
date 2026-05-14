@@ -18,6 +18,8 @@ interface TrackedSession {
   directory: string;
   createdAt: number;
   lastSeenAt: number;
+  hasSeenBusy: boolean;
+  idleSince?: number;
   missingSince?: number;
 }
 
@@ -44,6 +46,8 @@ interface SessionEvent {
 type CloseReason = 'idle' | 'deleted' | 'missing' | 'timeout';
 
 const SESSION_TIMEOUT_MS = 10 * 60 * 1000;
+const SESSION_IDLE_GRACE_MS = 15 * 1000;
+const SESSION_IDLE_DEBOUNCE_MS = POLL_INTERVAL_BACKGROUND_MS * 2;
 const SESSION_MISSING_GRACE_MS = POLL_INTERVAL_BACKGROUND_MS * 3;
 
 /**
@@ -177,6 +181,7 @@ export class MultiplexerSessionManager {
         directory,
         createdAt: now,
         lastSeenAt: now,
+        hasSeenBusy: false,
       });
 
       log('[multiplexer-session-manager] pane spawned', {
@@ -198,11 +203,12 @@ export class MultiplexerSessionManager {
     if (!sessionId) return;
 
     if (event.properties?.status?.type === 'idle') {
-      await this.closeSession(sessionId, 'idle');
+      await this.closeIfIdleConfirmed(sessionId, Date.now());
       return;
     }
 
     if (event.properties?.status?.type === 'busy') {
+      this.markBusy(sessionId);
       await this.respawnIfKnown(sessionId);
     }
   }
@@ -263,19 +269,28 @@ export class MultiplexerSessionManager {
         if (status) {
           tracked.lastSeenAt = now;
           tracked.missingSince = undefined;
-        } else if (!tracked.missingSince) {
+          if (status.type === 'busy') {
+            this.markBusy(sessionId, now);
+          }
+        } else if (
+          tracked.hasSeenBusy &&
+          now - tracked.createdAt >= SESSION_IDLE_GRACE_MS &&
+          !tracked.missingSince
+        ) {
           tracked.missingSince = now;
         }
 
+        const idleConfirmed = isIdle && this.markIdleAndCheck(tracked, now);
         const missingTooLong =
+          tracked.hasSeenBusy &&
           !!tracked.missingSince &&
           now - tracked.missingSince >= SESSION_MISSING_GRACE_MS;
         const isTimedOut = now - tracked.createdAt > SESSION_TIMEOUT_MS;
 
-        if (isIdle || missingTooLong || isTimedOut) {
+        if (idleConfirmed || missingTooLong || isTimedOut) {
           sessionsToClose.push({
             sessionId,
-            reason: isIdle ? 'idle' : isTimedOut ? 'timeout' : 'missing',
+            reason: idleConfirmed ? 'idle' : isTimedOut ? 'timeout' : 'missing',
           });
         }
       }
@@ -328,6 +343,53 @@ export class MultiplexerSessionManager {
 
     this.closingSessions.set(sessionId, closePromise);
     await closePromise;
+  }
+
+  private async closeIfIdleConfirmed(
+    sessionId: string,
+    now: number,
+  ): Promise<void> {
+    const tracked = this.sessions.get(sessionId);
+    if (!tracked) return;
+
+    if (this.markIdleAndCheck(tracked, now)) {
+      await this.closeSession(sessionId, 'idle');
+    }
+  }
+
+  private markIdleAndCheck(tracked: TrackedSession, now: number): boolean {
+    tracked.lastSeenAt = now;
+    tracked.missingSince = undefined;
+
+    if (!tracked.hasSeenBusy) {
+      log('[multiplexer-session-manager] idle ignored before busy observed', {
+        sessionId: tracked.sessionId,
+      });
+      return false;
+    }
+
+    if (!tracked.idleSince) {
+      tracked.idleSince = now;
+      log('[multiplexer-session-manager] idle observed, waiting to confirm', {
+        sessionId: tracked.sessionId,
+      });
+      return false;
+    }
+
+    return (
+      now - tracked.createdAt >= SESSION_IDLE_GRACE_MS &&
+      now - tracked.idleSince >= SESSION_IDLE_DEBOUNCE_MS
+    );
+  }
+
+  private markBusy(sessionId: string, now = Date.now()): void {
+    const tracked = this.sessions.get(sessionId);
+    if (tracked) {
+      tracked.hasSeenBusy = true;
+      tracked.idleSince = undefined;
+      tracked.missingSince = undefined;
+      tracked.lastSeenAt = now;
+    }
   }
 
   private async respawnIfKnown(sessionId: string): Promise<void> {
@@ -407,6 +469,7 @@ export class MultiplexerSessionManager {
         directory: known.directory,
         createdAt: now,
         lastSeenAt: now,
+        hasSeenBusy: true,
       });
 
       log('[multiplexer-session-manager] pane respawned on busy', {

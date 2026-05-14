@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, mock, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, mock, test } from 'bun:test';
 import { MultiplexerSessionManager } from './session-manager';
 
 // Define the mock multiplexer
@@ -57,6 +57,8 @@ function createDeferred<T>() {
 }
 
 describe('MultiplexerSessionManager', () => {
+  const realDateNow = Date.now;
+
   beforeEach(() => {
     mockMultiplexer.spawnPane.mockReset();
     mockMultiplexer.spawnPane.mockResolvedValue({
@@ -67,6 +69,11 @@ describe('MultiplexerSessionManager', () => {
     mockMultiplexer.closePane.mockResolvedValue(true);
     mockMultiplexer.isInsideSession.mockReset();
     mockMultiplexer.isInsideSession.mockReturnValue(true);
+    Date.now = realDateNow;
+  });
+
+  afterEach(() => {
+    Date.now = realDateNow;
   });
 
   describe('constructor', () => {
@@ -209,12 +216,37 @@ describe('MultiplexerSessionManager', () => {
   });
 
   describe('polling and closure', () => {
-    test('closes pane when session becomes idle', async () => {
+    test('does not close pane on early idle status event', async () => {
+      const ctx = createMockContext();
+      const manager = new MultiplexerSessionManager(
+        ctx,
+        defaultMultiplexerConfig,
+      );
+
+      await manager.onSessionCreated({
+        type: 'session.created',
+        properties: { info: { id: 'c-early-idle', parentID: 'p1' } },
+      });
+
+      await manager.onSessionStatus({
+        type: 'session.status',
+        properties: {
+          sessionID: 'c-early-idle',
+          status: { type: 'idle' },
+        },
+      });
+
+      expect(mockMultiplexer.closePane).not.toHaveBeenCalled();
+    });
+
+    test('closes pane when idle persists after busy, grace, and debounce', async () => {
       const ctx = createMockContext();
       mockMultiplexer.spawnPane.mockResolvedValue({
         success: true,
         paneId: 'p-1',
       });
+      let now = 1_000;
+      Date.now = () => now;
 
       const manager = new MultiplexerSessionManager(
         ctx,
@@ -226,15 +258,124 @@ describe('MultiplexerSessionManager', () => {
         type: 'session.created',
         properties: { info: { id: 'c1', parentID: 'p1' } },
       });
+      await manager.onSessionStatus({
+        type: 'session.status',
+        properties: { sessionID: 'c1', status: { type: 'busy' } },
+      });
 
-      // Mock status
       ctx.client.session.status.mockResolvedValue({
         data: { c1: { type: 'idle' } },
       });
 
       await (manager as any).pollSessions();
+      expect(mockMultiplexer.closePane).not.toHaveBeenCalled();
+
+      now += 16_000;
+      await (manager as any).pollSessions();
 
       expect(mockMultiplexer.closePane).toHaveBeenCalledWith('p-1');
+    });
+
+    test('busy status clears a pending idle debounce', async () => {
+      const ctx = createMockContext();
+      let now = 1_000;
+      Date.now = () => now;
+      const manager = new MultiplexerSessionManager(
+        ctx,
+        defaultMultiplexerConfig,
+      );
+
+      await manager.onSessionCreated({
+        type: 'session.created',
+        properties: { info: { id: 'c-idle-busy', parentID: 'p1' } },
+      });
+
+      await manager.onSessionStatus({
+        type: 'session.status',
+        properties: {
+          sessionID: 'c-idle-busy',
+          status: { type: 'idle' },
+        },
+      });
+
+      now += 16_000;
+      await manager.onSessionStatus({
+        type: 'session.status',
+        properties: {
+          sessionID: 'c-idle-busy',
+          status: { type: 'busy' },
+        },
+      });
+      await manager.onSessionStatus({
+        type: 'session.status',
+        properties: {
+          sessionID: 'c-idle-busy',
+          status: { type: 'idle' },
+        },
+      });
+
+      expect(mockMultiplexer.closePane).not.toHaveBeenCalled();
+    });
+
+    test('does not close on missing status during initial grace period', async () => {
+      const ctx = createMockContext();
+      let now = 1_000;
+      Date.now = () => now;
+      const manager = new MultiplexerSessionManager(
+        ctx,
+        defaultMultiplexerConfig,
+      );
+
+      await manager.onSessionCreated({
+        type: 'session.created',
+        properties: { info: { id: 'c-missing-grace', parentID: 'p1' } },
+      });
+      await manager.onSessionStatus({
+        type: 'session.status',
+        properties: {
+          sessionID: 'c-missing-grace',
+          status: { type: 'busy' },
+        },
+      });
+
+      ctx.client.session.status.mockResolvedValue({ data: {} });
+      await (manager as any).pollSessions();
+      now += 16_000;
+      await (manager as any).pollSessions();
+
+      expect(mockMultiplexer.closePane).not.toHaveBeenCalled();
+    });
+
+    test('closes on missing status only after busy, grace, and missing debounce', async () => {
+      const ctx = createMockContext();
+      let now = 1_000;
+      Date.now = () => now;
+      const manager = new MultiplexerSessionManager(
+        ctx,
+        defaultMultiplexerConfig,
+      );
+
+      await manager.onSessionCreated({
+        type: 'session.created',
+        properties: { info: { id: 'c-missing-close', parentID: 'p1' } },
+      });
+      await manager.onSessionStatus({
+        type: 'session.status',
+        properties: {
+          sessionID: 'c-missing-close',
+          status: { type: 'busy' },
+        },
+      });
+
+      ctx.client.session.status.mockResolvedValue({ data: {} });
+      now += 16_000;
+      await (manager as any).pollSessions();
+      expect(mockMultiplexer.closePane).not.toHaveBeenCalled();
+
+      now += 7_500;
+      await (manager as any).pollSessions();
+
+      expect(mockMultiplexer.closePane).toHaveBeenCalled();
     });
 
     test('does not close on transient status absence', async () => {
@@ -284,9 +425,20 @@ describe('MultiplexerSessionManager', () => {
         },
       });
 
+      await manager.onSessionStatus({
+        type: 'session.status',
+        properties: {
+          sessionID: 'child-789',
+          status: { type: 'busy' },
+        },
+      });
+
+      (manager as any).sessions.get('child-789').createdAt -= 16_000;
       ctx.client.session.status.mockResolvedValue({
         data: { 'child-789': { type: 'idle' } },
       });
+      await (manager as any).pollSessions();
+      (manager as any).sessions.get('child-789').idleSince -= 16_000;
       await (manager as any).pollSessions();
 
       await manager.onSessionStatus({
@@ -310,6 +462,8 @@ describe('MultiplexerSessionManager', () => {
 
     test('respawns after in-flight idle close when busy resumes same session', async () => {
       const ctx = createMockContext();
+      let now = 1_000;
+      Date.now = () => now;
       const manager = new MultiplexerSessionManager(
         ctx,
         defaultMultiplexerConfig,
@@ -339,6 +493,24 @@ describe('MultiplexerSessionManager', () => {
           },
         },
       });
+
+      await manager.onSessionStatus({
+        type: 'session.status',
+        properties: {
+          sessionID: 'child-close-race',
+          status: { type: 'busy' },
+        },
+      });
+
+      await manager.onSessionStatus({
+        type: 'session.status',
+        properties: {
+          sessionID: 'child-close-race',
+          status: { type: 'idle' },
+        },
+      });
+
+      now += 16_000;
 
       const idlePromise = manager.onSessionStatus({
         type: 'session.status',
@@ -375,6 +547,8 @@ describe('MultiplexerSessionManager', () => {
 
     test('does not respawn after in-flight close if session is deleted', async () => {
       const ctx = createMockContext();
+      let now = 1_000;
+      Date.now = () => now;
       const manager = new MultiplexerSessionManager(
         ctx,
         defaultMultiplexerConfig,
@@ -404,6 +578,16 @@ describe('MultiplexerSessionManager', () => {
           },
         },
       });
+
+      await manager.onSessionStatus({
+        type: 'session.status',
+        properties: {
+          sessionID: 'child-delete-race',
+          status: { type: 'idle' },
+        },
+      });
+
+      now += 16_000;
 
       const idlePromise = manager.onSessionStatus({
         type: 'session.status',
