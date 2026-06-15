@@ -1,0 +1,90 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "/krzjac-dev/omo"
+  ],
+  "agent": {
+    "build": {
+      "disable": false
+    },
+    "explore": {
+      "disable": true
+    },
+    "general": {
+      "disable": true
+    },
+    "plan": {
+      "disable": false
+    },
+    "orchestrator": {
+      "permission": {
+        "*": "deny",
+        "task": "allow",
+        "jules": "allow",
+        "github": "allow",
+        "brave-search": "allow",
+        "chrome-devtools": "allow"
+      }
+    },
+    "tester": {
+      "description": "End-to-end testing agent. Verifies frontend functionality and visual aspects using Chrome DevTools browser automation.",
+      "mode": "subagent",
+      "permission": {
+        "read": "allow",
+        "chrome-devtools": "allow"
+      }
+    }
+  },
+  "lsp": true,
+  "mcp": {
+    "jules": {
+      "type": "local",
+      "command": [
+        "jules-mcp"
+      ]
+    },
+    "github": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_GITHUB_TOKEN"
+      }
+    },
+    "brave-search": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@brave/brave-search-mcp-server",
+        "--brave-api-key",
+        "YOUR_BRAVE_API_KEY"
+      ]
+    },
+    "chrome-devtools": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--headless",
+        "--executablePath=/usr/bin/google-chrome-stable",
+        "--isolated",
+        "--chrome-arg=--no-sandbox",
+        "--chrome-arg=--disable-dev-shm-usage",
+        "--chrome-arg=--disable-gpu"
+      ]
+    },
+    "playwright": {
+      "type": "local",
+      "command": ["playwright-mcp", "--headless", "--caps", "vision"]
+    },
+    "puppeteer": {
+      "type": "local",
+      "command": ["npx", "-y", "@anthropic/mcp-puppeteer"]
+    }
+  }
+}
