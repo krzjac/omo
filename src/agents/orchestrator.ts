@@ -294,11 +294,20 @@ Steps:
    - Run the **pre-flight check**.
    - Use **Jules** (via MCP) as the primary implementer with the JULES_IMPLEMENTER_PROMPT template.
    - If Jules implementation fails, fall back to **@fixer**.
-   - Poll for the PR/branch created by Jules.
-   - Checkout the branch locally using \`gh pr checkout\` or \`git fetch && git checkout\`.
-   - Delegate to **@tester** for verification.
-   - If tests pass: add a success comment, move to the next issue.
-   - If tests fail: add a feedback comment, send the feedback to Jules and retry up to 3 times.
+   - Poll for the PR/branch created by Jules (see Handling Jules PR Branch below).
+   - Record the current base branch (e.g., \`master\` or \`main\`).
+   - Fetch the PR branch: \`git fetch origin\`.
+   - Checkout the PR branch locally using \`gh pr checkout <pr-url>\` or \`git checkout <pr-branch>\`.
+   - Delegate to **@tester** for verification on the PR branch.
+   - If tests pass:
+     - Return to the base branch: \`git checkout <base-branch>\`.
+     - Merge the PR branch into the base branch: \`git merge <pr-branch>\`.
+     - Push the base branch: \`git push origin <base-branch>\`.
+     - Add a success comment and move to the next issue.
+   - If tests fail:
+     - Return to the base branch: \`git checkout <base-branch>\`.
+     - Leave the PR branch intact.
+     - Add a feedback comment and send the feedback to Jules, retry up to 3 times.
    - After 3 failures: stop and escalate to the user.
    - Add a **milestone health update** after each issue.
    - If the next issue no longer fits after recent changes, trigger the **replan gate**.
@@ -334,6 +343,23 @@ If the current issue no longer fits after previous changes:
 - Do not continue automatically.
 - Propose options: (a) update the Design Spec, (b) skip the issue, (c) pause and replan the milestone.
 - Wait for user confirmation.
+
+#### Handling Jules PR Branch
+When Jules creates a PR:
+1. Poll the Jules session status via \`GET /v1alpha/sessions/{session_id}\` until it reaches \`COMPLETED\` or \`FAILED\`.
+2. On \`COMPLETED\`, read \`outputs[0].pullRequest.url\` to get the PR URL.
+3. Record the PR URL and Jules session ID in a comment on the issue.
+4. Record the current base branch (e.g., \`master\` or \`main\`).
+5. Run \`git fetch origin\` to update remote refs.
+6. Checkout the PR branch locally:
+   - Preferred: \`gh pr checkout <pr-url>\`
+   - Fallback: query GitHub API/MCP for the PR head branch, then \`git checkout <pr-branch>\`.
+7. Delegate to \`@tester\` for verification on the PR branch.
+8. After verification:
+   - If tests pass: \`git checkout <base-branch>\`, \`git merge <pr-branch>\`, \`git push origin <base-branch>\`.
+   - If tests fail: \`git checkout <base-branch>\`, leave the PR branch intact, and send feedback to Jules.
+
+Always return to the base branch after testing, so the next issue starts from a clean, known state.
 
 ## 6. Verify
 - Run relevant checks/diagnostics for the change

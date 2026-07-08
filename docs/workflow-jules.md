@@ -7,7 +7,7 @@ This document describes the milestone-driven planning and execution workflow pow
 The orchestrator operates in two modes:
 
 1. **Planning Mode** — create a GitHub milestone, decompose the work into issues, and document each issue with a detailed Design Spec.
-2. **Execution Mode** — run through the milestone issues one by one, dispatching Jules to implement, testing, and iterating until done.
+2. **Execution Mode** — run through the milestone issues one by one, dispatching Jules to implement, testing on the PR branch, and merging back to the base branch.
 
 ## Models
 
@@ -56,14 +56,32 @@ See templates in `docs/templates/issue-body.md` and `docs/templates/design-spec.
    - **Pre-flight check**: verify the previous issue is done, assumptions still hold, Design Spec is valid, and success criteria are achievable.
    - Dispatch **Jules** (using `docs/templates/jules-implementer-prompt.md`) with the full issue body.
    - If Jules implementation fails, use `@fixer` as fallback.
-   - Poll for the PR/branch created by Jules.
-   - Checkout the branch locally.
-   - Delegate to `@tester` for verification.
-   - If tests pass: comment success and move to the next issue.
-   - If tests fail: add feedback comment and retry Jules up to **3 times**.
+   - Poll the Jules session until it reaches `COMPLETED` or `FAILED`.
+   - On `COMPLETED`, read `outputs[0].pullRequest.url`.
+   - Record the PR URL and Jules session ID in a comment on the issue.
+   - Record the current base branch (e.g., `master` or `main`).
+   - Fetch the PR branch: `git fetch origin`.
+   - Checkout the PR branch locally: `gh pr checkout <pr-url>` or `git checkout <pr-branch>`.
+   - Delegate to `@tester` for verification on the PR branch.
+   - If tests pass:
+     - Return to the base branch: `git checkout <base-branch>`.
+     - Merge the PR branch: `git merge <pr-branch>`.
+     - Push the base branch: `git push origin <base-branch>`.
+     - Add a success comment and move to the next issue.
+   - If tests fail:
+     - Return to the base branch: `git checkout <base-branch>`.
+     - Leave the PR branch intact.
+     - Add a feedback comment and retry Jules up to **3 times**.
    - After 3 failures, stop and escalate to the user.
    - Add a milestone health update after each issue.
-   - If the next issue no longer fits, trigger the **replan gate**.
+   - If the next issue no longer fits, trigger the replan gate.
+
+## Branch Management
+
+- Always record the base branch before checking out a PR branch.
+- Always return to the base branch after testing.
+- Only merge to the base branch after tests pass.
+- Never leave the orchestrator on a Jules PR branch when starting the next issue.
 
 ## Fallback Rules
 
@@ -87,6 +105,6 @@ See templates in `docs/templates/issue-body.md` and `docs/templates/design-spec.
 
 ## Notes
 
-- The orchestrator does **not** merge PRs automatically. After successful tests, the PR is left open for user review.
+- The orchestrator does **not** merge PRs automatically. After successful tests, it merges the PR branch into the local base branch and pushes.
 - Every test case must map to a success criterion from the issue body.
 - `@tester` also runs a regression smoke test of the most critical paths from previous issues in the same milestone.
