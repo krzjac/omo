@@ -24,6 +24,9 @@ ${WRITABLE_FILE_OPERATIONS_RULES}
 - Only ask for missing inputs you truly cannot retrieve yourself
 - Do not act as the primary reviewer; implement requested changes and surface obvious issues briefly
 
+## Fallback Role
+If the orchestrator invokes you because Jules implementation failed, implement the code based on the issue body provided. The issue body (Goal, Problem, Success Criteria, Design Spec, Implementation Plan) is your source of truth.
+
 **Output Format**:
 <summary>
 Brief summary of what was implemented

@@ -11,6 +11,8 @@ export const SUBAGENT_NAMES = [
   'designer',
   'fixer',
   'observer',
+  'planner',
+  'tester',
   'council',
   'councillor',
 ] as const;
@@ -30,15 +32,17 @@ export const PROTECTED_AGENTS = new Set(['orchestrator', 'councillor']);
 // Default models for each agent
 // orchestrator is undefined so its model is fully resolved at runtime via priority fallback
 export const DEFAULT_MODELS: Record<AgentName, string | undefined> = {
-  orchestrator: undefined,
-  oracle: 'openai/gpt-5.5',
-  librarian: 'openai/gpt-5.4-mini',
-  explorer: 'openai/gpt-5.4-mini',
-  designer: 'openai/gpt-5.4-mini',
-  fixer: 'openai/gpt-5.4-mini',
-  observer: 'openai/gpt-5.4-mini',
-  council: 'openai/gpt-5.4-mini',
-  councillor: 'openai/gpt-5.4-mini',
+  orchestrator: 'kimi-for-coding/k2p7',
+  oracle: 'deepseek/deepseek-v4-flash',
+  librarian: 'deepseek/deepseek-v4-flash',
+  explorer: 'deepseek/deepseek-v4-flash',
+  designer: 'deepseek/deepseek-v4-flash',
+  fixer: 'deepseek/deepseek-v4-flash',
+  observer: 'deepseek/deepseek-v4-flash',
+  planner: 'deepseek/deepseek-v4-flash',
+  tester: 'kimi-for-coding/k2p7',
+  council: 'deepseek/deepseek-v4-flash',
+  councillor: 'deepseek/deepseek-v4-flash',
 };
 
 // Polling configuration
