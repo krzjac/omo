@@ -66,7 +66,7 @@ See templates in `docs/templates/issue-body.md` and `docs/templates/design-spec.
    - If tests pass:
      - Return to the base branch: `git checkout <base-branch>`.
      - Merge the PR branch: `git merge <pr-branch>`.
-     - Push the base branch: `git push origin <base-branch>`.
+     - Do NOT push to origin. The user will push the base branch after reviewing.
      - Add a success comment and move to the next issue.
    - If tests fail:
      - Return to the base branch: `git checkout <base-branch>`.

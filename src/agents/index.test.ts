@@ -379,11 +379,12 @@ describe('createAgents', () => {
     expect(names).toContain('oracle');
     expect(names).toContain('librarian');
     expect(names).toContain('fixer');
+    expect(names).toContain('tester');
   });
 
-  test('creates exactly 7 agents by default (observer disabled, council unconfigured)', () => {
+  test('creates exactly 9 agents by default (observer disabled, council unconfigured)', () => {
     const agents = createAgents();
-    expect(agents.length).toBe(7);
+    expect(agents.length).toBe(9);
   });
 
   test('does not create council when council is not configured', () => {
@@ -812,13 +813,13 @@ describe('disabled_agents', () => {
 
   test('agent count decreases when agents are disabled', () => {
     const agents = createAgents();
-    expect(agents.length).toBe(7); // observer disabled, council unconfigured
+    expect(agents.length).toBe(9); // observer disabled, council unconfigured
 
     const disabledConfig: PluginConfig = {
       disabled_agents: ['observer', 'designer'],
     };
     const disabledAgents = createAgents(disabledConfig);
-    expect(disabledAgents.length).toBe(6);
+    expect(disabledAgents.length).toBe(8);
   });
 
   test('getDisabledAgents respects protection rules', () => {
@@ -862,8 +863,9 @@ describe('disabled_agents', () => {
     };
     const agents = createAgents(config);
     const names = agents.map((a) => a.name);
-    expect(agents.length).toBe(8);
+    expect(agents.length).toBe(10);
     expect(names).toContain('observer');
+    expect(names).toContain('tester');
     expect(names).not.toContain('council');
   });
 });

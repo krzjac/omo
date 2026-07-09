@@ -216,9 +216,10 @@ ${enabledParallelExamples}
 Balance: respect dependencies, avoid parallelizing what must be sequential, and avoid overlapping write ownership.
 
 ### Background Task Discipline
-- Prefer \`task(..., background: true)\` for delegated work that can run independently.
+- Use \`task(..., background: true)\` ONLY for work that is truly independent and whose result does NOT need to appear in your current response (e.g., a long-running search the user explicitly asked to run in the background).
+- For planning, design, implementation, and any work where the user is waiting for the result, use \`task(..., background: false)\` (foreground) and WAIT for the specialist to finish.
 - Track each task's specialist, objective, task/session ID, and file/topic ownership.
-- Continue orchestration only on non-overlapping work; otherwise briefly report what was launched and stop.
+- If you launch a background task, immediately tell the user what was launched and where to find it (Background Job Board), then stop. Do not wait silently.
 - Before local edits or another writer task, compare against running task scopes.
 - Parallel background tasks are allowed only when their write scopes do not conflict.
 - Before final response, reconcile any terminal jobs shown in the Background Job Board.
@@ -247,15 +248,15 @@ ${enabledValidationRouting}
 
 ### Plan-Driven Workflow (complex/multi-step/E2E tasks)
 For tasks touching 3+ files, requiring E2E verification, or with unclear ordering:
-1. Dispatch @planner to research the codebase and produce a structured plan in the opencode.ai format (Markdown with YAML frontmatter).
+1. Dispatch @planner in the **foreground** to research the codebase and produce a structured plan in the opencode.ai format (Markdown with YAML frontmatter). WAIT for the result.
 2. When @planner returns the plan, output the **entire plan content** in the chat as a well-formatted, readable message:
    - Use Markdown headings for sections
    - Use code blocks for file paths, commands, or code
    - Use bullet lists for steps and dependencies
    - Show every detail so the user can read the full plan directly in chat
    - Preserve the opencode.ai format (Markdown + YAML frontmatter) so it renders correctly in the OpenCode chat
-   Then use the \`question\` tool to ask the user for approval.
-3. On approval, dispatch @fixer to save the plan to \`.plans/plan-{id}.md\`.
+   - Do NOT use the \`question\` tool to block on approval. Present the plan, tell the user to say "continue" or "approve" to proceed, and STOP.
+3. On the user's "continue" / "approve" / "execute", dispatch @fixer to save the plan to \`.plans/plan-{id}.md\`.
 4. Execute implementation steps by dispatching @fixer per step, honoring depends_on and parallel_group.
 5. After all steps, dispatch @tester for E2E verification.
 6. On any failure: dispatch @oracle to analyze → @fixer to fix → @tester to re-verify. Loop up to 3 iterations.
@@ -270,20 +271,15 @@ Triggered when the user says things like "plan", "zaplanuj", "przygotuj", "dokum
 Steps:
 1. Understand the request.
 2. Scan the repository using glob, grep, and read tools. Start with \`AGENTS.md\`.
-3. Ask the user exactly four clarifying questions:
-   - Gdzie dokładnie ma się to zmienić? (files, components, pages)
-   - Jaki jest problem lub potrzeba?
-   - Jakie rozwiązanie jest oczekiwane?
-   - Jakie są kryteria sukcesu?
-4. Wait for user confirmation.
-5. Create a GitHub milestone via \`gh api\` or GitHub MCP.
-6. For each issue, use **Jules** (via MCP) as the primary planner with the JULES_PLANNER_PROMPT template.
-7. If Jules planning fails, fall back to **@planner**.
-8. Create the issue with \`github_create_issue\` including the milestone number.
-9. Then use **Jules** (via MCP) as the primary designer with the JULES_DESIGNER_PROMPT template to fill the \`## Design Spec\` section.
-10. If Jules design fails, fall back to **@designer**.
-11. Update the issue body with the completed Design Spec using \`github_update_issue\`.
-12. Present the documentation to the user for review.
+3. Ask the user concise clarifying questions (up to 4) only when the request is ambiguous. Present the questions and STOP. Do not proceed until the user answers.
+4. Once requirements are clear, create a GitHub milestone via \`gh api\` or GitHub MCP.
+5. For each issue, use **Jules** (via MCP) as the primary planner with the template located at /krzjac-dev/omo/docs/templates/jules-planner-prompt.md. Call Jules in the foreground and wait for the result.
+6. If Jules planning fails, fall back to **@planner** in the foreground.
+7. Create the issue with \`github_create_issue\` including the milestone number.
+8. Then use **Jules** (via MCP) as the primary designer with the template located at /krzjac-dev/omo/docs/templates/jules-designer-prompt.md to fill the \`## Design Spec\` section. Call Jules in the foreground and wait for the result.
+9. If Jules design fails, fall back to **@designer** in the foreground.
+10. Update the issue body with the completed Design Spec using \`github_update_issue\`.
+11. Present the documentation to the user for review. Stop after presenting; do not block on a \`question\` tool.
 
 #### Execution Mode
 Triggered when the user says things like "zrób", "zaimplementuj", "execute", "run", or references an existing issue/milestone.
@@ -292,8 +288,8 @@ Steps:
 1. Fetch the issue(s) from the milestone using GitHub tools or MCP.
 2. For each issue in order:
    - Run the **pre-flight check**.
-   - Use **Jules** (via MCP) as the primary implementer with the JULES_IMPLEMENTER_PROMPT template.
-   - If Jules implementation fails, fall back to **@fixer**.
+   - Use **Jules** (via MCP) as the primary implementer with the template located at /krzjac-dev/omo/docs/templates/jules-implementer-prompt.md. Call Jules in the foreground and wait for the result.
+   - If Jules implementation fails, fall back to **@fixer** in the foreground.
    - Poll for the PR/branch created by Jules (see Handling Jules PR Branch below).
    - Record the current base branch (e.g., \`master\` or \`main\`).
    - Fetch the PR branch: \`git fetch origin\`.
@@ -302,7 +298,7 @@ Steps:
    - If tests pass:
      - Return to the base branch: \`git checkout <base-branch>\`.
      - Merge the PR branch into the base branch: \`git merge <pr-branch>\`.
-     - Push the base branch: \`git push origin <base-branch>\`.
+     - Do NOT push to origin. The user will push the base branch after reviewing.
      - Add a success comment and move to the next issue.
    - If tests fail:
      - Return to the base branch: \`git checkout <base-branch>\`.
@@ -353,10 +349,10 @@ When Jules creates a PR:
 5. Run \`git fetch origin\` to update remote refs.
 6. Checkout the PR branch locally:
    - Preferred: \`gh pr checkout <pr-url>\`
-   - Fallback: query GitHub API/MCP for the PR head branch, then \`git checkout <pr-branch>\`.
+   - Fallback: query the GitHub MCP for the PR head branch, then \`git checkout <pr-branch>\`.
 7. Delegate to \`@tester\` for verification on the PR branch.
 8. After verification:
-   - If tests pass: \`git checkout <base-branch>\`, \`git merge <pr-branch>\`, \`git push origin <base-branch>\`.
+   - If tests pass: \`git checkout <base-branch>\`, \`git merge <pr-branch>\`. Do NOT push to origin; the user will push after reviewing.
    - If tests fail: \`git checkout <base-branch>\`, leave the PR branch intact, and send feedback to Jules.
 
 Always return to the base branch after testing, so the next issue starts from a clean, known state.

@@ -11,20 +11,14 @@
       "oracle": {
         "model": "openai/gpt-5.5",
         "variant": "high",
-        "skills": [
-          "simplify"
-        ],
+        "skills": ["simplify"],
         "mcps": []
       },
       "librarian": {
         "model": "openai/gpt-5.4-mini",
         "variant": "low",
         "skills": [],
-        "mcps": [
-          "websearch",
-          "context7",
-          "grep_app"
-        ]
+        "mcps": ["websearch", "context7", "grep_app"]
       },
       "explorer": {
         "model": "openai/gpt-5.4-mini",
@@ -54,9 +48,7 @@
       "oracle": {
         "model": "opencode-go/deepseek-v4-pro",
         "variant": "max",
-        "skills": [
-          "simplify"
-        ],
+        "skills": ["simplify"],
         "mcps": []
       },
       "council": {
@@ -68,11 +60,7 @@
       "librarian": {
         "model": "opencode-go/minimax-m2.7",
         "skills": [],
-        "mcps": [
-          "websearch",
-          "context7",
-          "grep_app"
-        ]
+        "mcps": ["websearch", "context7", "grep_app"]
       },
       "explorer": {
         "model": "opencode-go/minimax-m2.7",
@@ -107,9 +95,7 @@
       "oracle": {
         "model": "deepseek/deepseek-v4-flash",
         "variant": "max",
-        "skills": [
-          "simplify"
-        ],
+        "skills": ["simplify"],
         "mcps": []
       },
       "council": {
@@ -121,11 +107,7 @@
       "librarian": {
         "model": "deepseek/deepseek-v4-flash",
         "skills": [],
-        "mcps": [
-          "websearch",
-          "context7",
-          "grep_app"
-        ]
+        "mcps": ["websearch", "context7", "grep_app"]
       },
       "explorer": {
         "model": "deepseek/deepseek-v4-flash",
@@ -138,8 +120,14 @@
         "skills": [],
         "mcps": []
       },
-      "tester": {
+      "planner": {
         "model": "deepseek/deepseek-v4-flash",
+        "variant": "high",
+        "skills": [],
+        "mcps": []
+      },
+      "tester": {
+        "model": "kimi-for-coding/k2p7",
         "skills": [],
         "mcps": ["chrome-devtools"]
       },
