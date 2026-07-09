@@ -13,6 +13,8 @@ export const SUBAGENT_NAMES = [
   'observer',
   'planner',
   'tester',
+  'guardian',
+  'detective',
   'council',
   'councillor',
 ] as const;
@@ -41,6 +43,8 @@ export const DEFAULT_MODELS: Record<AgentName, string | undefined> = {
   observer: 'deepseek/deepseek-v4-flash',
   planner: 'deepseek/deepseek-v4-flash',
   tester: 'kimi-for-coding/k2p7',
+  guardian: 'kimi-for-coding/k2p7',
+  detective: 'kimi-for-coding/k2p7',
   council: 'deepseek/deepseek-v4-flash',
   councillor: 'deepseek/deepseek-v4-flash',
 };

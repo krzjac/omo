@@ -21,6 +21,8 @@ import { createCouncillorAgent } from './councillor';
 import { createDesignerAgent } from './designer';
 import { createExplorerAgent } from './explorer';
 import { createFixerAgent } from './fixer';
+import { createGuardianAgent } from './guardian';
+import { createDetectiveAgent } from './detective';
 import { createLibrarianAgent } from './librarian';
 import { createObserverAgent } from './observer';
 import { createOracleAgent } from './oracle';
@@ -262,6 +264,8 @@ const SUBAGENT_FACTORIES: Record<SubagentName, AgentFactory> = {
   oracle: createOracleAgent,
   designer: createDesignerAgent,
   fixer: createFixerAgent,
+  guardian: createGuardianAgent,
+  detective: createDetectiveAgent,
   observer: createObserverAgent,
   planner: createPlannerAgent,
   tester: createTesterAgent,
