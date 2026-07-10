@@ -34,7 +34,7 @@ export const PROTECTED_AGENTS = new Set(['orchestrator', 'councillor']);
 // Default models for each agent
 // orchestrator is undefined so its model is fully resolved at runtime via priority fallback
 export const DEFAULT_MODELS: Record<AgentName, string | undefined> = {
-  orchestrator: 'kimi-for-coding/k2p7',
+  orchestrator: 'deepseek/deepseek-v4-flash',
   oracle: 'deepseek/deepseek-v4-flash',
   librarian: 'deepseek/deepseek-v4-flash',
   explorer: 'deepseek/deepseek-v4-flash',
@@ -42,9 +42,9 @@ export const DEFAULT_MODELS: Record<AgentName, string | undefined> = {
   fixer: 'deepseek/deepseek-v4-flash',
   observer: 'deepseek/deepseek-v4-flash',
   planner: 'deepseek/deepseek-v4-flash',
-  tester: 'kimi-for-coding/k2p7',
-  guardian: 'kimi-for-coding/k2p7',
-  detective: 'kimi-for-coding/k2p7',
+  tester: 'google/gemini-3.1-flash-lite',
+  guardian: 'deepseek/deepseek-v4-flash',
+  detective: 'deepseek/deepseek-v4-flash',
   council: 'deepseek/deepseek-v4-flash',
   councillor: 'deepseek/deepseek-v4-flash',
 };
