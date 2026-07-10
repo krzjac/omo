@@ -42,7 +42,7 @@ export const DEFAULT_MODELS: Record<AgentName, string | undefined> = {
   fixer: 'deepseek/deepseek-v4-flash',
   observer: 'deepseek/deepseek-v4-flash',
   planner: 'deepseek/deepseek-v4-flash',
-  tester: 'google/gemini-2.5-flash-lite',
+  tester: 'google/gemini-2.5-flash-lite-preview',
   guardian: 'deepseek/deepseek-v4-flash',
   detective: 'deepseek/deepseek-v4-flash',
   council: 'deepseek/deepseek-v4-flash',
