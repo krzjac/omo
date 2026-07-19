@@ -13,5 +13,5 @@ Accepted. Repository-owned safe text and filename scanning, rebuilt generated-ou
 
 [Mobile evidence — 390×844](https://raw.githubusercontent.com/krzjac/omo/b95576c36429bf68ebcfa0b6786b905d2ad49dd2/evidence/local-orchestrator-20260719/mobile.png)
 ![Mobile evidence — 390×844](https://raw.githubusercontent.com/krzjac/omo/b95576c36429bf68ebcfa0b6786b905d2ad49dd2/evidence/local-orchestrator-20260719/mobile.png)
-[ Laptop evidence — 1366×768](https://raw.githubusercontent.com/krzjac/omo/b95576c36429bf68ebcfa0b6786b905d2ad49dd2/evidence/local-orchestrator-20260719/laptop.png)
+[Laptop evidence — 1366×768](https://raw.githubusercontent.com/krzjac/omo/b95576c36429bf68ebcfa0b6786b905d2ad49dd2/evidence/local-orchestrator-20260719/laptop.png)
 ![Laptop evidence — 1366×768](https://raw.githubusercontent.com/krzjac/omo/b95576c36429bf68ebcfa0b6786b905d2ad49dd2/evidence/local-orchestrator-20260719/laptop.png)
