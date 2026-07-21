@@ -6,7 +6,7 @@ echo "aW1wb3J0IHR5cGUgeyBBZ2VudERlZmluaXRpb24gfSBmcm9tICcuL29yY2hlc3RyYXRvcic7Cg
 
 sed -i "s/'tester',/'tester',\n  'guardian',/g" src/config/constants.ts
 sed -i "s/tester: 'kimi-for-coding\/k2p7',/tester: 'kimi-for-coding\/k2p7',\n  guardian: 'kimi-for-coding\/k2p7',/g" src/config/constants.ts
-sed -i "/import { createFixerAgent }/a import { createGuardianAgent } from './guardian';" src/agents/index.ts
+sed -i "/import { createFixerAgent }/a import { createGuardianAgent } from '.\/guardian';" src/agents/index.ts
 sed -i "/fixer: createFixerAgent,/a \  guardian: createGuardianAgent," src/agents/index.ts
 
 npm run build
