@@ -3,19 +3,19 @@ import { type AgentName, getAgentOverride, type PluginConfig } from '.';
 /** Default MCPs per agent - "*" means all MCPs, "!item" excludes specific MCPs */
 
 export const DEFAULT_AGENT_MCPS: Record<AgentName, string[]> = {
-  orchestrator: ['*', '!context7'],
-  designer: [],
-  oracle: [],
-  librarian: ['websearch', 'context7', 'gh_grep'],
-  explorer: [],
-  fixer: [],
-  observer: [],
-  planner: [],
-  tester: [],
-  guardian: [],
-  detective: [],
-  council: [],
-  councillor: [],
+  orchestrator: ['*'],
+  designer: ['*'],
+  oracle: ['*'],
+  librarian: ['*'],
+  explorer: ['*'],
+  fixer: ['*'],
+  observer: ['*'],
+  planner: ['*'],
+  tester: ['*'],
+  guardian: ['*'],
+  detective: ['*'],
+  council: ['*'],
+  councillor: ['*'],
 };
 
 /**
