@@ -1,1 +1,86 @@
-Ly8gQWdlbnQgbmFtZXMKZXhwb3J0IGNvbnN0IEFHRU5UX0FMSUFTRVM6IFJlY29yZDxzdHJpbmcsIHN0cmluZz4gPSB7CiAgZXhwbG9yZTogJ2V4cGxvcmVyJywKICAnZnJvbnRlbmQtdWkteGItZW5naW5lZXInOiAnZGVzaWduZXInLAp9OwoKZXhwb3J0IGNvbnN0IFNVQkFHRU5UX05BTUVTID0gWwogICdleHBsb3JlcicsCiAgJ2xpYnJhcmlhbicsCiAgJ29yYWNsZScsCiAgJ2Rlc2lnbmVyJywKICAnZml4ZXInLAogICdvYnNlcnZlcicsCiAgJ3BsYW5uZXInLAogICd0ZXN0ZXInLAogICdndWFyZGlhbicsCiAgJ2RldGVjdGl2ZScsCiAgJ2NvdW5jaWwnLAogICdjb3VuY2lsbG9yJywKXSBhcyBjb25zdDsKCmV4cG9ydCBjb25zdCBBTExfQUdFTlRfTkFNRVMgPSBbJ29yY2hlc3RyYXRvcicsIC4uLlNVQkFHRU5UX05BTUVTXSBhcyBjb25zdDsKCi8vIEFnZW50IG5hbWUgdHlwZSAoZm9yIHVzZSBpbiBERUZBVUxUX01PREVMUykKZXhwb3J0IHR5cGUgQWdlbnROYW1lID0gKHR5cGVvZiBBTExfQUdFTlRfTkFNRVMpW251bWJlcl07CgovKiogQWdlbnRzIHRoYXQgY2Fubm90IGJlIGRpc2FibGVkIGV2ZW4gaWYgbGlzdGVkIGluIGRpc2FibGVkX2FnZW50cyBjb25maWcuICovCmV4cG9ydCBjb25zdCBQUk9URUNURURfQUdFTlRTID0gbmV3IFNldChbJ29yY2hlc3RyYXRvcicsICdjb3VuY2lsbG9yJ10pOwoKLyoqCiAqIEdldCB0aGUgbGlzdCBvZiBvcmNoZXN0cmF0YWJsZSBhZ2VudHMsIGV4Y2x1ZGluZyBhbnkgZGlzYWJsZWQgYWdlbnRzLgogKiBUaGlzIGlzIHVzZWQgZm9yIGRlbGVnYXRpb24gdmFsaWRhdGlvbiBhdCBydW50aW1lLgogKi8KLy8gRGVmYXVsdCBtb2RlbHMgZm9yIGVhY2ggYWdlbnQKLy8gb3JjaGVzdHJhdG9yIGlzIHVuZGVmaW5lZCBzbyBpdHMgbW9kZWwgaXMgZnVsbHkgcmVzb2x2ZWQgYXQgcnVudGltZSB2aWEgcHJpb3JpdHkgZmFsbGJhY2sKZXhwb3J0IGNvbnN0IERFRkFVTFRfTU9ERUxTOiBSZWNvcmQ8QWdlbnROYW1lLCBzdHJpbmcgfCB1bmRlZmluZWQ+ID0gewogIG9yY2hlc3RyYXRvcjogJ29wZW5haS9ncHQtNS42LXRlcnJhJywKICBvcmFjbGU6ICdvcGVuYWkvZ3B0LTUuNi10ZXJyYS1mYXN0JywKICBsaWJyYXJpYW46ICdvcGVuYWkvZ3B0LTUuNi10ZXJyYS1mYXN0JywKICBleHBsb3JlcjogJ29wZW5haS9ncHQtNS42LXRlcnJhLWZhc3QnLAogIGRlc2lnbmVyOiAnb3BlbmFpL2dwdC01LjYtdGVycmEtZmFzdCcsCiAgZml4ZXI6ICdvcGVuYWkvZ3B0LTUuNi10ZXJyYScsCiAgb2JzZXJ2ZXI6ICdvcGVuYWkvZ3B0LTUuNi10ZXJyYS1mYXN0JywKICBwbGFubmVyOiAnb3BlbmFpL2dwdC01LjYtdGVycmEtZmFzdCcsCiAgdGVzdGVyOiAnb3BlbmFpL2dwdC01LjYtc29sJywKICBndWFyZGlhbjogJ29wZW5haS9ncHQtNS42LXRlcnJhLWZhc3QnLAogIGRldGVjdGl2ZTogJ29wZW5haS9ncHQtNS42LXRlcnJhLWZhc3QnLAogIGNvdW5jaWw6ICdvcGVuYWkvZ3B0LTUuNi10ZXJyYS1mYXN0JywKICBjb3VuY2lsbG9yOiAnb3BlbmFpL2dwdC01LjYtdGVycmEtZmFzdCcsCn07CgovLyBQb2xsaW5nIGNvbmZpZ3VyYXRpb24KZXhwb3J0IGNvbnN0IFBPTExfSU5URVJWQUxfTVMgPSA1MDA7CmV4cG9ydCBjb25zdCBQT0xMX0lOVEVSVkFMX0JBQ0tHUk9VTkRfTVMgPSAyMDAwOwoKLy8gVGltZW91dHMKZXhwb3J0IGNvbnN0IE1BWF9QT0xMX1RJTUVfTVMgPSA1ICogNjAgKiAxMDAwOyAvLyA1IG1pbnV0ZXMKCi8vIFN1YmFnZW50IGRlcHRoIGxpbWl0cwpleHBvcnQgY29uc3QgREVGQVVMVF9NQVhfU1VCQUdFTlRfREVQVEggPSAzOwoKLy8gV29ya2Zsb3cgcmVtaW5kZXJzCmV4cG9ydCBjb25zdCBQSEFTRV9SRU1JTkRFUl9URVhUID0gYCFJTVBPUlRBTlQhIFNjaGVkdWxlciB3b3JrZmxvdzogcGxhbiBsYW5lcy9kZXBlbmRlbmNpZXMg4oaSIGRpc3BhdGNoIGJhY2tncm91bmQgc3BlY2lhbGlzdHMg4oaSIHRyYWNrIHRhc2sgSURzIOKGkiB3YWl0IGZvciBob29rLWRyaXZlbiBjb21wbGV0aW9uIOKGkiByZWNvbmNpbGUgdGVybWluYWwgcmVzdWx0cyDigJIgdmVyaWZ5LiBEbyBub3QgcG9sbCBydW5uaW5nIGpvYnMsIGNvbnN1bWUgcnVubmluZy1qb2Igb3V0cHV0LCBvciBhZHZhbmNlIGRlcGVuZGVudCB3b3JrLiAhRU5EISpgOwoKZXhwb3J0IGNvbnN0IFBIQVNFX1JFTUlOREVSID0gYDxpbnRlcm5hbF9yZW1pbmRlcj4ke1BIQVNFX1JFTUlOREVSX1RFWFR9PC9pbnRlcm5hbF9yZW1pbmRlcj5gOwoKZXhwb3J0IGNvbnN0IFdSSVRBQkxFX0ZJTEVfT1BFUkFUSU9OU19SVUxFUyA9IGAqKkZpbGUgT3BlcmF0aW9ucyBSdWxlcyoqOgotIFByZWZlciBkZWRpY2F0ZWQgZmlsZSB0b29scyBmb3Igbm9ybWFsIGNvZGUgd29yazogZ2xvYi9ncmVwL2FzdF9ncmVwX3NlYXJjaCBmb3IgZGlzY292ZXJ5LCByZWFkIGZvciBmaWxlIGNvbnRlbnRzLCBhbmQgZWRpdC93cml0ZS9hcHBseV9wYXRjaCBmb3IgdGFyZ2V0ZWQgc291cmNlIGNoYW5nZXMuCi0gVXNlIGJhc2ggZm9yIGV4ZWN1dGlvbiBhbmQgYXV0b21hdGlvbjogZ2l0LCBwYWNrYWdlIG1hbmFnZXJzLCB0ZXN0cywgYnVpbGRzLCBzY3JpcHRzLCBkaWFnbm9zdGljcywgYW5kIHNoZWxsLW5hdGl2ZSBmaWxlc3lzdGVtIG9wZXJhdGlvbnMuCi0gU2hlbGwgaXMgYWNjZXB0YWJsZSBmb3IgYnVsayBvciBtZWNoYW5pY2FsIGZpbGVzeXN0ZW0gY2hhbmdlcyB3aGVuIGl0IGlzIGNsZWFyZXIgb3Igc2FmZXIgdGhhbiBtYW55IGluZGl2aWR1YWwgZWRpdHMgKGZvciBleGFtcGxlOiB0cnVuY2F0ZSBnZW5lcmF0ZWQgbG9ncywgcmVtb3ZlIGJ1aWxkIGFydGlmYWN0cywgYmF0Y2ggcmVuYW1lL21vdmUgZmlsZXMpLCBlc3BlY2lhbGx5IHdoZW4gdGhlIHVzZXIgZXhwbGljaXRseSBhc2tzIGZvciB0aGF0IHNoZWxsIG9wZXJhdGlvbi4KLSBCZWZvcmUgZGVzdHJ1Y3RpdmUgb3IgYnJvYWQgc2hlbGwgb3BlcmF0aW9ucywgdmVyaWZ5IHRoZSB0YXJnZXQgc2V0IGFuZCBxdW90ZSBwYXRocy4gUHJlZmVyIGEgZHJ5LXJ1bi9saXN0aW5nIGZpcnN0IHdoZW4gcHJhY3RpY2FsLgotIERvIG5vdCB1c2UgY2F0L2hlYWQvdGFpbC9zZWQvYXdrIG9ubHkgdG8gcmVhZCBjb2RlIGludG8gY29udGV4dDsgdXNlIHJlYWQvZ3JlcCB1bmxlc3MgYSBzaGVsbCBwaXBlbGluZSBpcyBnZW51aW5lbHkgdGhlIGJldHRlciBkaWFnbm9zdGljLmA7CgpleHBvcnQgY29uc3QgUkVBRE9OTFlfRklMRV9PUEVSQVRJT05TX1JVTEVTID0gYCoqRmlsZSBPcGVyYXRpb25zIFJ1bGVzKio6Ci0gUkVBRC1PTkxZOiBpbnNwZWN0IGFuZCByZXBvcnQ7IGRvIG5vdCBtb2RpZnkgZmlsZXMuCi0gUHJlZmVyIGRlZGljYXRlZCBmaWxlIHRvb2xzIGZvciBjb2RlYmFzZSBpbnNwZWN0aW9uOiBnbG9iL2dyZXAvYXN0X2dyZXBfc2VhcmNoIGZvciBkaXNjb3ZlcnkgYW5kIHJlYWQgZm9yIGZpbGUgY29udGVudHMuCi0gQmFzaCBpcyBhbGxvd2VkIGZvciBub24tbXV0YXRpbmcgZGlhZ25vc3RpY3MgYW5kIHNoZWxsLW5hdGl2ZSBpbnNwZWN0aW9uIHdoZW4gaXQgaXMgdGhlIGNsZWFyZXN0IHRvb2wsIGJ1dCBub3QgZm9yIG1vZGlmeWluZyBmaWxlcy4KLSBEbyBub3QgdXNlIGNhdC9oZWFkL3RhaWwvc2VkL2F3ayBvbmx5IHRvIHJlYWQgY29kZSBpbnRvIGNvbnRleHQ7IHVzZSByZWFkL2dyZXAgdW5sZXNzIGEgc2hlbGwgcGlwZWxpbmUgaXMgZ2VudWluZWx5IHRoZSBiZXR0ZXIgZGlhZ25vc3RpYy5gOwoKZXhwb3J0IGNvbnN0IE5PX1NIRUxMX1JFQURPTkxZX0ZJTEVfT1BFUkFUSU9OU19SVUxFUyA9IGAqKkZpbGUgT3BlcmF0aW9ucyBSdWxlcyoqOgotIFJFQUQtT05MWTogaW5zcGVjdCBhbmQgcmVwb3J0OyBkbyBub3QgbW9kaWZ5IGZpbGVzLgotIFVzZSBnbG9iL2dyZXAvYXN0X2dyZXBfc2VhcmNoIGZvciBkaXNjb3ZlcnkgYW5kIHJlYWQgZm9yIGZpbGUgY29udGVudHMuCi0gRG8gbm90IHVzZSBiYXNoIG9yIHNoZWxsIGNvbW1hbmRzLmA7CgovLyBUbXV4IHBhbmUgc3Bhd24gZGVsYXkgKG1zKSDigJQgZ2l2ZXMgVG11eFNlc3Npb25NYW5hZ2VyIHRpbWUgdG8gY3JlYXRlIHBhbmUKZXhwb3J0IGNvbnN0IFRNVVhfU1BBV05fREVMQVlfTVMgPSA1MDA7Cg==
+// Agent names
+export const AGENT_ALIASES: Record<string, string> = {
+  explore: 'explorer',
+  'frontend-ui-ux-engineer': 'designer',
+};
+
+export const SUBAGENT_NAMES = [
+  'explorer',
+  'librarian',
+  'oracle',
+  'designer',
+  'fixer',
+  'observer',
+  'planner',
+  'tester',
+  'guardian',
+  'detective',
+  'council',
+  'councillor',
+] as const;
+
+export const ALL_AGENT_NAMES = ['orchestrator', ...SUBAGENT_NAMES] as const;
+
+// Agent name type (for use in DEFAULT_MODELS)
+export type AgentName = (typeof ALL_AGENT_NAMES)[number];
+
+/** Agents that cannot be disabled even if listed in disabled_agents config. */
+export const PROTECTED_AGENTS = new Set(['orchestrator', 'councillor']);
+
+/**
+ * Get the list of orchestratable agents, excluding any disabled agents.
+ * This is used for delegation validation at runtime.
+ */
+// Default models for each agent
+// orchestrator is undefined so its model is fully resolved at runtime via priority fallback
+export const DEFAULT_MODELS: Record<AgentName, string | undefined> = {
+  orchestrator: 'openai/gpt-5.6-terra',
+  oracle: 'openai/gpt-5.6-terra-fast',
+  librarian: 'openai/gpt-5.6-terra-fast',
+  explorer: 'openai/gpt-5.6-terra-fast',
+  designer: 'openai/gpt-5.6-terra-fast',
+  fixer: 'openai/gpt-5.6-terra',
+  observer: 'openai/gpt-5.6-terra-fast',
+  planner: 'openai/gpt-5.6-terra-fast',
+  tester: 'openai/gpt-5.6-sol',
+  guardian: 'openai/gpt-5.6-terra-fast',
+  detective: 'openai/gpt-5.6-terra-fast',
+  council: 'openai/gpt-5.6-terra-fast',
+  councillor: 'openai/gpt-5.6-terra-fast',
+};
+
+// Polling configuration
+export const POLL_INTERVAL_MS = 500;
+export const POLL_INTERVAL_BACKGROUND_MS = 2000;
+
+// Timeouts
+export const MAX_POLL_TIME_MS = 5 * 60 * 1000; // 5 minutes
+
+// Subagent depth limits
+export const DEFAULT_MAX_SUBAGENT_DEPTH = 3;
+
+// Workflow reminders
+export const PHASE_REMINDER_TEXT = `!IMPORTANT! Scheduler workflow: plan lanes/dependencies → dispatch background specialists → track task IDs → wait for hook-driven completion → reconcile terminal results → verify. Do not poll running jobs, consume running-job output, or advance dependent work. !END!`;
+
+export const PHASE_REMINDER = `<internal_reminder>${PHASE_REMINDER_TEXT}</internal_reminder>`;
+
+export const WRITABLE_FILE_OPERATIONS_RULES = `**File Operations Rules**:
+- Prefer dedicated file tools for normal code work: glob/grep/ast_grep_search for discovery, read for file contents, and edit/write/apply_patch for targeted source changes.
+- Use bash for execution and automation: git, package managers, tests, builds, scripts, diagnostics, and shell-native filesystem operations.
+- Shell is acceptable for bulk or mechanical filesystem changes when it is clearer or safer than many individual edits (for example: truncate generated logs, remove build artifacts, batch rename/move files), especially when the user explicitly asks for that shell operation.
+- Before destructive or broad shell operations, verify the target set and quote paths. Prefer a dry-run/listing first when practical.
+- Do not use cat/head/tail/sed/awk only to read code into context; use read/grep unless a shell pipeline is genuinely the better diagnostic.`;
+
+export const READONLY_FILE_OPERATIONS_RULES = `**File Operations Rules**:
+- READ-ONLY: inspect and report; do not modify files.
+- Prefer dedicated file tools for codebase inspection: glob/grep/ast_grep_search for discovery and read for file contents.
+- Bash is allowed for non-mutating diagnostics and shell-native inspection when it is the clearest tool, but not for modifying files.
+- Do not use cat/head/tail/sed/awk only to read code into context; use read/grep unless a shell pipeline is genuinely the better diagnostic.`;
+
+export const NO_SHELL_READONLY_FILE_OPERATIONS_RULES = `**File Operations Rules**:
+- READ-ONLY: inspect and report; do not modify files.
+- Use glob/grep/ast_grep_search for discovery and read for file contents.
+- Do not use bash or shell commands.`;
+
+// Tmux pane spawn delay (ms) — gives TmuxSessionManager time to create pane
+export const TMUX_SPAWN_DELAY_MS = 500;
